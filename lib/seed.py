@@ -1,4 +1,14 @@
 import utils
+import os
+
+os.makedirs("data", exist_ok=True)
+
+config = {
+    "games_path" : "data/games.csv",
+    "remarks_path" : "data/remarks.csv",
+    "runs_path" : "data/runs.csv",
+    "config_path" : "data/config.json"
+}
 
 game_col = ['id', 'title', 'developer', 'platform']
 run_col = ['id', 'game_id', 'state', 'score']
@@ -34,15 +44,17 @@ remark_2 = {
 games = []
 games.append(game_col)
 games.append(list(game.values()))
-utils.save_csv("data/games.csv", games)
+utils.save_csv(config["games_path"], games)
 
 runs = []
 runs.append(run_col)
 runs.append(list(run.values()))
-utils.save_csv("data/runs.csv", runs)
+utils.save_csv(config["runs_path"], runs)
 
 remarks = []
 remarks.append(remark_col)
 remarks.append(list(remark_1.values()))
 remarks.append(list(remark_2.values()))
-utils.save_csv("data/remarks.csv", remarks)
+utils.save_csv(config["remarks_path"], remarks)
+
+utils.save_json(config["config_path"], config)

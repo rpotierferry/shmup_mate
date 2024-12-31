@@ -2,10 +2,11 @@ import controllers
 import views
 
 class Router:
-    def __init__(self):
+    def __init__(self, params):
         self.running = True
-        self.g_controller = controllers.GamesController('data/games.csv', 'data/runs.csv')
-        """ use config file """
+        self.g_controller = controllers.GamesController(
+            params["games_path"],
+            params["runs_path"])
         views.splash()
 
     def run(self):
@@ -18,7 +19,6 @@ class Router:
                 case "2":
                     self.g_controller.add()
                 case"x":
-                    print('bye')
                     views.clear()
                     self.running = False
 
