@@ -1,2 +1,4 @@
 readme.md
-__pycache__/*
+__pycache__/
+lib/__pycache__/
+data/
