@@ -40,7 +40,8 @@ class Router:
             self.run()
         # go to specific game view
         else:
-            self.current_game = self.g_controller.find(choice)
+            self.game_choice = choice
+            self.load_game()
             self.manage_game()
 
     def manage_game(self):
@@ -52,8 +53,10 @@ class Router:
         if choice == "x":
             self.run()
         elif choice == "a":
-            # add a run
-            pass
+            views.clear()
+            self.r_controller.add(self.current_game)
+            self.load_game()
+            self.manage_game()
         else:
             run = self.r_controller.find_game_run(choice, self.current_game)
             self.manage_run(run)
@@ -62,3 +65,6 @@ class Router:
         views.clear()
         views.show_run(run)
         self.manage_game()
+
+    def load_game(self):
+        self.current_game = self.g_controller.find(self.game_choice)

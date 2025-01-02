@@ -46,6 +46,7 @@ class RunsRepository:
         self.path = path
         self.data = utils.load_csv(path)
         self.runs = RunsRepository.build_runs_list(self.data)
+        self.next_id = len(self.runs) + 1
 
     """ finds all the runs associated with a game """
     def get_game_runs(self, game):
@@ -54,6 +55,19 @@ class RunsRepository:
             if run.game_id == game.id:
                 game_runs.append(run)
         return game_runs
+
+    def create(self, run_info):
+        row = []
+        row.append(self.next_id)
+        row.append(run_info["game_id"])
+        row.append(run_info["state"])
+        row.append(run_info["score"])
+        self.data.append(row)
+        self._save()
+
+    """ overwrite the saved data """
+    def _save(self):
+        utils.save_csv(self.path, self.data)
 
     @classmethod
     def build_runs_list(cls, data):

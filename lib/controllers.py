@@ -8,13 +8,14 @@ class GamesController:
         self.path_runs = path_runs
 
         self.games_repo = GamesController.load_games_repo(self.path_games)
-        self.runs_repo = GamesController.load_runs_repo(self.path_runs)
         # stores game between controller actions
         self.current_game = False
 
     """ find a specific game """
     def find(self, id):
         self.current_game = self.games_repo.get_game(id)
+        # needs to load an up-to-data run list
+        self.runs_repo = GamesController.load_runs_repo(self.path_runs)
         self.current_game.runs = self.runs_repo.get_game_runs(self.current_game)
         return self.current_game
 
@@ -51,8 +52,8 @@ class RunsController:
         self.path_runs = path_runs
         self.path_remarks = path_remarks
 
-        self.runs_repo = repositories.RunsRepository(self.path_runs)
-        self.remarks_repo = repositories.RemarksRepository(self.path_remarks)
+        self.runs_repo = RunsController.load_runs_repo(self.path_runs)
+        self.remarks_repo = RunsController.load_remarks_repo(self.path_remarks)
 
         self.current_run = False
 
@@ -60,3 +61,22 @@ class RunsController:
         self.current_run = game.runs[int(run_id) - 1]
         self.current_run.remarks = self.remarks_repo.get_run_remarks(self.current_run)
         return self.current_run
+
+    def add(self, game):
+        score = views.ask_thing("Score")
+        state = views.ask_thing("State")
+        game_id = game.id
+        self.runs_repo.create({
+            "score" : score,
+            "state" : state,
+            "game_id" : game_id
+        })
+        self.runs_repo = RunsController.load_runs_repo(self.path_runs)
+
+    @classmethod
+    def load_runs_repo(cls, path):
+        return repositories.RunsRepository(path)
+
+    @classmethod
+    def load_remarks_repo(cls, path):
+        return repositories.RemarksRepository(path)
