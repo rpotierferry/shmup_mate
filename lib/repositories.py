@@ -48,7 +48,7 @@ class RunsRepository:
         self.runs = RunsRepository.build_runs_list(self.data)
 
     """ finds all the runs associated with a game """
-    def find_runs(self, game):
+    def get_game_runs(self, game):
         game_runs = []
         for run in self.runs:
             if run.game_id == game.id:
@@ -60,12 +60,30 @@ class RunsRepository:
         runs = []
         for row in data[1:]:
             runs.append(models.Run(
-                row[0], row[1], row[2], row[3]
-            ))
+                row[0], row[1], row[2], row[3])
+                )
         return runs
 
 
 
 class RemarksRepository:
-    def __init__(self):
-        pass
+    def __init__(self, path):
+        self.path = path
+        self.data = utils.load_csv(path)
+        self.remarks = RemarksRepository.build_remarks_list(self.data)
+
+    def get_run_remarks(self, run):
+        run_remarks = []
+        for remark in self.remarks:
+            if remark.run_id == run.id:
+                run_remarks.append(remark)
+        return run_remarks
+
+    @classmethod
+    def build_remarks_list(cls, data):
+        remarks = []
+        for row in data[1:]:
+            remarks.append(models.Remark(
+                row[0], row[1], row[2])
+                )
+        return remarks

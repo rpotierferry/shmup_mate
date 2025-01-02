@@ -19,3 +19,11 @@ class Remark:
         self.id = id
         self.run_id = run_id
         self.text = text
+
+class Stages:
+    def __init__(self):
+        pass
+
+class Strategies:
+    def __init__(self):
+        pass

@@ -9,13 +9,14 @@ class GamesController:
 
         self.games_repo = GamesController.load_games_repo(self.path_games)
         self.runs_repo = GamesController.load_runs_repo(self.path_runs)
+        # stores game between controller actions
+        self.current_game = False
 
     """ find a specific game """
     def find(self, id):
-        game = self.games_repo.get_game(id)
-        game.runs = self.runs_repo.find_runs(game)
-        views.show_game_info(game)
-        views.show_runs(game.runs)
+        self.current_game = self.games_repo.get_game(id)
+        self.current_game.runs = self.runs_repo.get_game_runs(self.current_game)
+        return self.current_game
 
     """ add a new game """
     def add(self):
@@ -46,5 +47,16 @@ class GamesController:
 
 """ handles the data related to runs """
 class RunsController:
-    def __init__(self, path_runs):
-        pass
+    def __init__(self, path_runs, path_remarks):
+        self.path_runs = path_runs
+        self.path_remarks = path_remarks
+
+        self.runs_repo = repositories.RunsRepository(self.path_runs)
+        self.remarks_repo = repositories.RemarksRepository(self.path_remarks)
+
+        self.current_run = False
+
+    def find_game_run(self, run_id, game):
+        self.current_run = game.runs[int(run_id) - 1]
+        self.current_run.remarks = self.remarks_repo.get_run_remarks(self.current_run)
+        return self.current_run
