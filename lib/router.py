@@ -12,32 +12,38 @@ class Router:
             params["runs_path"],
             params["remarks_path"]
         )
-        self.current_game = False
         views.splash()
 
     def run(self):
         while self.running:
             choice = views.main_menu()
             match choice:
-                # see games list
-                case "1":
-                    self.g_controller.index()
-                    self.select_game()
-                # add a new game
-                case "2":
-                    self.g_controller.add()
                 # quit the app
                 case"x":
                     views.clear()
                     self.running = False
+                # see games list
+                case "1":
+                    self.select_game()
+                # add a new game
+                case "2":
+                    self.g_controller.add()
 
     # game selection menu
     def select_game(self):
+        views.clear()
+        self.g_controller.index()
         choice = views.choose_game()
         # return to main menu
         if choice == "x":
             views.clear()
+            self.reset_game_choice()
             self.run()
+            return
+        # add a game
+        if choice == "a":
+            self.g_controller.add()
+            self.select_game()
         # go to specific game view
         else:
             self.game_choice = choice
@@ -51,7 +57,9 @@ class Router:
 
         choice = views.game_management_menu()
         if choice == "x":
-            self.run()
+            self.select_game()
+            self.reset_game_choice()
+            return
         elif choice == "a":
             views.clear()
             self.r_controller.add(self.current_game)
@@ -68,3 +76,6 @@ class Router:
 
     def load_game(self):
         self.current_game = self.g_controller.find(self.game_choice)
+
+    def reset_game_choice(self):
+        self.game_choice = False
