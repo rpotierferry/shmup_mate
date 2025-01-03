@@ -34,9 +34,12 @@ class GamesRepository:
     def build_games_list(cls, data):
         games = []
         for row in data[1:]:
-            games.append(models.Game(
-                row[0], row[1], row[2], row[3])
-            )
+            games.append(models.Game({
+                "id" : row[0],
+                "title" : row[1],
+                "dev" : row[2],
+                "platform" : row[3]
+                }))
         return games
 
 
@@ -62,6 +65,7 @@ class RunsRepository:
         row.append(run_info["game_id"])
         row.append(run_info["state"])
         row.append(run_info["score"])
+        row.append(run_info["stage"])
         self.data.append(row)
         self._save()
 
@@ -73,9 +77,13 @@ class RunsRepository:
     def build_runs_list(cls, data):
         runs = []
         for row in data[1:]:
-            runs.append(models.Run(
-                row[0], row[1], row[2], row[3])
-                )
+            runs.append(models.Run({
+                "id" : row[0],
+                "game_id" : row[1],
+                "state" : row[2],
+                "stage" : row[4],
+                "score" : row[3]
+                }))
         return runs
 
 
@@ -97,7 +105,9 @@ class RemarksRepository:
     def build_remarks_list(cls, data):
         remarks = []
         for row in data[1:]:
-            remarks.append(models.Remark(
-                row[0], row[1], row[2])
+            remarks.append(models.Remark({
+                "id" : row[0],
+                "run_id" : row[1],
+                "text" : row[2]})
                 )
         return remarks

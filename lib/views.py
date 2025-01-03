@@ -9,7 +9,7 @@ def main_menu():
     print("2. Add a game")
     print("x. Quit")
 
-    return input("What next?\n-> ")
+    return input("\nWhat next?\n-> ")
 
 def show_game(game):
     print(f"{game.id} - {game.title}")
@@ -27,20 +27,20 @@ def show_game_info(game):
     print(f"Platform: {game.platform}")
 
 def choose_game():
-    return input("Choose game (x to go back)\n-> ")
+    return input("\nChoose game (x to go back)\n-> ")
 
 def ask_thing(thing):
     choice = input(f"{thing}?\n-> ")
     return choice
 
 def game_management_menu():
-    return input("View which run? ('a' to add a new run, 'x' to go back)\n-> ")
+    return input("\nView which run? ('a' to add a new run, 'x' to go back)\n-> ")
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
 def show_run(run):
-    print(f"{run.score} - {run.state}")
+    print(f"{run.state} - {run.stage} - {run.score}\n")
     for remark in run.remarks:
-        print(remark.text)
-    return input("'x' to go back\n-> ")
+        print(f"'{remark.text}'")
+    return input("\n'x' to go back\n-> ")

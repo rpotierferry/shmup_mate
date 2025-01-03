@@ -63,13 +63,14 @@ class RunsController:
         return self.current_run
 
     def add(self, game):
-        score = views.ask_thing("Score")
         state = views.ask_thing("State")
-        game_id = game.id
+        stage = views.ask_thing("Stage")
+        score = views.ask_thing("Score")
         self.runs_repo.create({
-            "score" : score,
+            "game_id" : game.id,
             "state" : state,
-            "game_id" : game_id
+            "stage" : stage,
+            "score" : score
         })
         self.runs_repo = RunsController.load_runs_repo(self.path_runs)
 

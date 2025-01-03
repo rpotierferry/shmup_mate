@@ -25,7 +25,8 @@ run = {
     "id" : 1,
     "game_id" : game["id"],
     "state" : False,
-    "score": 1000000
+    "score": 1000000,
+    "stage" : 3
 }
 
 remark_1 = {

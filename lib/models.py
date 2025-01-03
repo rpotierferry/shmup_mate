@@ -1,24 +1,25 @@
 class Game:
-    def __init__(self, id, title, dev, platform):
-        self.id = id
-        self.title = title
-        self.dev = dev
-        self.platform = platform
+    def __init__(self, game_info):
+        self.id = game_info["id"]
+        self.title = game_info["title"]
+        self.dev = game_info["dev"]
+        self.platform = game_info["platform"]
         self.runs = []
 
 class Run:
-    def __init__(self, id, game_id, state=False, score=0):
-        self.id = id
-        self.game_id = game_id
-        self.state = state
-        self.score = score
+    def __init__(self, run_info):
+        self.id = run_info["id"]
+        self.game_id = run_info["game_id"]
+        self.state = run_info["state"]
+        self.score = run_info["score"]
+        self.stage = run_info["stage"]
         self.remarks = []
 
 class Remark:
-    def __init__(self, id, run_id, text):
-        self.id = id
-        self.run_id = run_id
-        self.text = text
+    def __init__(self, rem_info):
+        self.id = rem_info["id"]
+        self.run_id = rem_info["run_id"]
+        self.text = rem_info["text"]
 
 class Stages:
     def __init__(self):
