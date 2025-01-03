@@ -4,13 +4,16 @@ import views
 class Router:
     def __init__(self, params):
         self.running = True
+        self.games_path = params["games_path"]
+        self.runs_path = params["runs_path"]
+        self.remarks_path = params["remarks_path"]
         self.g_controller = controllers.GamesController(
-            params["games_path"],
-            params["runs_path"]
+            self.games_path,
+            self.runs_path
             )
-        self.run_controller = controllers.RunsController(
-            params["runs_path"],
-            params["remarks_path"]
+        self.runs_controller = controllers.RunsController(
+            self.runs_path,
+            self.remarks_path
         )
         views.splash()
 
@@ -28,6 +31,8 @@ class Router:
                 # add a new game
                 case "2":
                     self.g_controller.add()
+                    self.g_controller.load_games_repo()
+                    return
 
     # game selection menu
     def select_game(self):
@@ -42,32 +47,37 @@ class Router:
         # add a game
         if choice == "a":
             self.g_controller.add()
+            self.g_controller.load_games_repo()
             self.select_game()
             return
         # go to specific game view
         else:
-            self.load_game(choice)
+            self.load_game(int(choice))
             self.manage_game()
             return
 
     def manage_game(self):
+        # displays game info and runs
         views.clear()
         views.show_game_info(self.current_game)
         views.show_runs(self.current_game.runs)
 
         choice = views.game_management_menu()
+        # go back
         if choice == "x":
             self.select_game()
             self.unload_game()
             return
+        # add a new run
         elif choice == "a":
             views.clear()
-            self.run_controller.add(self.current_game)
+            self.runs_controller.add(self.current_game)
+            self.runs_controller.load_runs_repo()
             self.load_game(self.current_game.id)
             self.manage_game()
             return
         else:
-            run = self.run_controller.find_game_run(choice, self.current_game)
+            run = self.runs_controller.find_game_run(int(choice), self.current_game)
             self.manage_run(run)
             return
 
@@ -77,7 +87,7 @@ class Router:
         self.manage_game()
         return
 
-    def load_game(self, gid):
+    def load_game(self, gid:int):
         self.current_game = self.g_controller.find(gid)
 
     def unload_game(self):

@@ -6,7 +6,7 @@ class GamesRepository:
     def __init__(self, path):
         self.path = path
         self.data = utils.load_csv(path)
-        self.games = GamesRepository.build_games_list(self.data)
+        self.games = self.build_games_list()
         self.next_id = len(self.games) + 1
 
     def all(self):
@@ -30,10 +30,9 @@ class GamesRepository:
         utils.save_csv(self.path, self.data)
 
     """ builds an array containing all games """
-    @classmethod
-    def build_games_list(cls, data):
+    def build_games_list(self):
         games = []
-        for row in data[1:]:
+        for row in self.data[1:]:
             games.append(models.Game({
                 "id" : row[0],
                 "title" : row[1],
@@ -48,7 +47,7 @@ class RunsRepository:
     def __init__(self, path):
         self.path = path
         self.data = utils.load_csv(path)
-        self.runs = RunsRepository.build_runs_list(self.data)
+        self.runs = self.build_runs_list()
         self.next_id = len(self.runs) + 1
 
     """ finds all the runs associated with a game """
@@ -73,10 +72,9 @@ class RunsRepository:
     def _save(self):
         utils.save_csv(self.path, self.data)
 
-    @classmethod
-    def build_runs_list(cls, data):
+    def build_runs_list(self):
         runs = []
-        for row in data[1:]:
+        for row in self.data[1:]:
             runs.append(models.Run({
                 "id" : row[0],
                 "game_id" : row[1],
@@ -92,7 +90,7 @@ class RemarksRepository:
     def __init__(self, path):
         self.path = path
         self.data = utils.load_csv(path)
-        self.remarks = RemarksRepository.build_remarks_list(self.data)
+        self.remarks = self.build_remarks_list()
 
     def get_run_remarks(self, run):
         run_remarks = []
@@ -101,10 +99,9 @@ class RemarksRepository:
                 run_remarks.append(remark)
         return run_remarks
 
-    @classmethod
-    def build_remarks_list(cls, data):
+    def build_remarks_list(self):
         remarks = []
-        for row in data[1:]:
+        for row in self.data[1:]:
             remarks.append(models.Remark({
                 "id" : row[0],
                 "run_id" : row[1],
