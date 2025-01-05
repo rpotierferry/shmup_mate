@@ -7,14 +7,6 @@ class Router:
         self.games_path = params["games_path"]
         self.runs_path = params["runs_path"]
         self.remarks_path = params["remarks_path"]
-        self.g_controller = controllers.GamesController(
-            self.games_path,
-            self.runs_path
-            )
-        self.runs_controller = controllers.RunsController(
-            self.runs_path,
-            self.remarks_path
-        )
         views.splash()
 
     def run(self):
@@ -30,14 +22,16 @@ class Router:
                     self.select_game()
                 # add a new game
                 case "2":
-                    self.g_controller.add()
-                    self.g_controller.load_games_repo()
+                    g_controller = self.load_games_controller()
+                    g_controller.add()
+                    self.run()
                     return
 
     # game selection menu
     def select_game(self):
         views.clear()
-        self.g_controller.index()
+        g_controller = self.load_games_controller()
+        g_controller.index()
         choice = views.choose_game()
         # return to main menu
         if choice == "x":
@@ -46,8 +40,7 @@ class Router:
             return
         # add a game
         if choice == "a":
-            self.g_controller.add()
-            self.g_controller.load_games_repo()
+            g_controller.add()
             self.select_game()
             return
         # go to specific game view
@@ -71,32 +64,51 @@ class Router:
         # add a new run
         elif choice == "a":
             views.clear()
-            self.runs_controller.add(self.current_game)
-            self.runs_controller.load_runs_repo()
+            runs_controller = self.load_runs_controller()
+            runs_controller.add(self.current_game)
+            runs_controller.load_runs_repo()
             self.load_game(self.current_game.id)
             self.manage_game()
             return
         else:
-            run = self.runs_controller.find_game_run(int(choice), self.current_game)
+            runs_controller = self.load_runs_controller()
+            # this does not find the correct run
+            run = self.current_game.runs[int(choice) - 1]
+            run = runs_controller.load_run_remarks(run)
             self.manage_run(run)
             return
 
     def manage_run(self, run):
         views.clear()
         choice = views.show_run(run)
+        # goes back
         if choice == "x":
             self.manage_game()
             return
+        # add a new remark
         else:
-            r_controller = controllers.RemarksController(self.remarks_path)
-            r_controller.add(run)
-            self.load_game(self.current_game.id)
-            run = self.runs_controller.find_game_run(run.id, self.current_game)
+            rem_controller = controllers.RemarksController(self.remarks_path)
+            rem_controller.add(run)
+            runs_controller = self.load_runs_controller()
+            run = runs_controller.load_run_remarks(run)
             self.manage_run(run)
             return
 
     def load_game(self, gid:int):
-        self.current_game = self.g_controller.find(gid)
+        g_controller = self.load_games_controller()
+        self.current_game = g_controller.find(gid)
 
     def unload_game(self):
         self.current_game = None
+
+    def load_games_controller(self):
+        return controllers.GamesController(
+            self.games_path,
+            self.runs_path
+            )
+
+    def load_runs_controller(self):
+        return controllers.RunsController(
+            self.runs_path,
+            self.remarks_path
+        )

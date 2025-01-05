@@ -50,8 +50,7 @@ class RunsController:
         self.path_remarks = path_remarks
 
 
-    def find_game_run(self, run_id:int, game):
-        run = game.runs[int(run_id) - 1]
+    def load_run_remarks(self, run):
         rem_repo = self.load_remarks_repo()
         run.remarks = rem_repo.get_run_remarks(run)
         return run

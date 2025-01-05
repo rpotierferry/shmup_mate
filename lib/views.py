@@ -27,7 +27,7 @@ def show_game_info(game):
     print(f"Platform: {game.platform}")
 
 def choose_game():
-    return input("\nChoose game (x to go back)\n-> ")
+    return input("\nChoose game ('x' to go back, 'a' to add a game)\n-> ")
 
 def ask_thing(thing):
     choice = input(f"{thing}?\n-> ")
