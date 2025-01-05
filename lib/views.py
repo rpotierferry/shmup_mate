@@ -43,4 +43,4 @@ def show_run(run):
     print(f"{run.state} - {run.stage} - {run.score}\n")
     for remark in run.remarks:
         print(f"'{remark.text}'")
-    return input("\n'x' to go back\n-> ")
+    return input("\n'x' to go back, 'a' to add a remark\n-> ")

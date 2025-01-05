@@ -91,6 +91,7 @@ class RemarksRepository:
         self.path = path
         self.data = utils.load_csv(path)
         self.remarks = self.build_remarks_list()
+        self.next_id = len(self.remarks) + 1
 
     def get_run_remarks(self, run):
         run_remarks = []
@@ -108,3 +109,14 @@ class RemarksRepository:
                 "text" : row[2]})
                 )
         return remarks
+
+    def create(self, r_info):
+        row = []
+        row.append(self.next_id)
+        row.append(r_info["run_id"])
+        row.append(r_info["text"])
+        self.data.append(row)
+        self._save()
+
+    def _save(self):
+        utils.save_csv(self.path, self.data)

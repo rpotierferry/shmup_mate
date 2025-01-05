@@ -73,3 +73,19 @@ class RunsController:
 
     def load_remarks_repo(self):
         return repositories.RemarksRepository(self.path_remarks)
+
+class RemarksController:
+
+    def __init__(self, path_remarks):
+        self.path_remarks = path_remarks
+
+    def add(self, run):
+        text = views.ask_thing("Remark")
+        rem_repo = self.load_remarks_repo()
+        rem_repo.create({
+            "text" : text,
+            "run_id" : run.id
+        })
+
+    def load_remarks_repo(self):
+        return repositories.RemarksRepository(self.path_remarks)

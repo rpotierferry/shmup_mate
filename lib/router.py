@@ -83,9 +83,17 @@ class Router:
 
     def manage_run(self, run):
         views.clear()
-        views.show_run(run)
-        self.manage_game()
-        return
+        choice = views.show_run(run)
+        if choice == "x":
+            self.manage_game()
+            return
+        else:
+            r_controller = controllers.RemarksController(self.remarks_path)
+            r_controller.add(run)
+            self.load_game(self.current_game.id)
+            run = self.runs_controller.find_game_run(run.id, self.current_game)
+            self.manage_run(run)
+            return
 
     def load_game(self, gid:int):
         self.current_game = self.g_controller.find(gid)
